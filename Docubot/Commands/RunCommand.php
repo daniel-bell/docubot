@@ -37,5 +37,6 @@ class RunCommand extends Command
         $output->writeln("<info>Running Docubot on $directory</info>");
 
         $db = new DocblockInputAdapter($directory);
+        $db->process();
     }
 }
