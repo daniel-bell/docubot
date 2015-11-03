@@ -14,6 +14,9 @@ abstract class InputAdapter
      */
     public $files;
 
+    /**
+     * @var resource|null
+     */
     public $currentFile;
 
     /**
@@ -60,6 +63,10 @@ abstract class InputAdapter
         return false;
     }
 
+    /**
+     * Load a file from the disk
+     * @param $path
+     */
     protected function loadFile($path)
     {
         if ($this->currentFile != null) {
@@ -68,16 +75,37 @@ abstract class InputAdapter
         $this->currentFile = fopen($path, 'r');
     }
 
-    protected function readFile(){
+    /**
+     * Read current line from the file
+     * @return string
+     */
+    protected function readFile()
+    {
         return fgets($this->currentFile);
     }
 
-    public function process(){
+    /**
+     * Loop over every file and line, call the process line method
+     * @throws \Exception
+     */
+    public function process()
+    {
         while (($file = $this->nextFile()) != false) {
             $this->loadFile($file);
-            while(($line = $this->readFile()) != false){
-                echo($line);
+            while (($line = $this->readFile()) != false) {
+                $this->processLine($line);
             }
         }
+    }
+
+    /**
+     * This should be overriden by the child class otherwise an exception is thrown
+     * This is where the main logic goes in the child class
+     * @param string $line
+     * @throws \Exception
+     */
+    public function processLine($line = '')
+    {
+        throw new \Exception($line . 'Input Adapter ' . get_class($this) . ' has not overriden the processLine method');
     }
 }
