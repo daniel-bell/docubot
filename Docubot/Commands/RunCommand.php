@@ -2,6 +2,7 @@
 
 namespace Docubot\Commands;
 
+use Docubot\InputAdapters\DocblockInputAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,5 +35,7 @@ class RunCommand extends Command
     {
         $directory = $input->getArgument('directory');
         $output->writeln("<info>Running Docubot on $directory</info>");
+
+        $db = new DocblockInputAdapter($directory);
     }
 }
